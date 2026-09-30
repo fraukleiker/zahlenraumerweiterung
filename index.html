@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>999 Froschgeschwister – Lernpfad bis 1000</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐸</text></svg>">
+<style>
+:root{
+  --pond:#1F6F8B; --pond-light:#CFE9EF;
+  --pad:#6BAA3A; --pad-dark:#3E7A22; --pad-light:#E3F2D3;
+  --sun:#FFC93C; --sun-dark:#E0A800;
+  --ink:#1D3B2A; --bg:#EEF7F1; --paper:#FFFFFF;
+  --retry:#E5733A; --retry-light:#FDE7DA;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Andika","Trebuchet MS",Verdana,sans-serif;font-size:20px;line-height:1.45}
+h1,h2,h3,.btn,.bubble b{font-family:"Fredoka","Arial Rounded MT Bold","Trebuchet MS",sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+button{font:inherit;cursor:pointer}
+.btn{border:0;border-radius:999px;padding:14px 28px;font-size:22px;font-weight:600;
+  background:var(--sun);color:var(--ink);box-shadow:0 4px 0 var(--sun-dark);min-height:56px}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--sun-dark)}
+.btn.green{background:var(--pad);color:#fff;box-shadow:0 4px 0 var(--pad-dark)}
+.btn.ghost{background:transparent;box-shadow:none;border:2px solid var(--ink);font-size:18px;padding:10px 20px;min-height:48px}
+.btn:focus-visible,input:focus-visible,.choice:focus-visible,.klasse:focus-visible{outline:4px solid var(--pond);outline-offset:3px}
+.btn[disabled]{opacity:.5}
+
+/* ---------- Startseite ---------- */
+.hero{background:var(--pond);color:#fff;border-radius:0 0 40px 40px;padding:24px 16px 70px;text-align:center;position:relative;overflow:hidden}
+.hero h1{margin:6px 0 4px;font-size:clamp(30px,6vw,46px);line-height:1.1}
+.hero p{margin:0;font-size:20px;opacity:.95}
+.klassen{display:flex;gap:16px;justify-content:center;margin:-52px auto 0;max-width:620px;padding:0 16px;position:relative}
+.klasse{flex:1;background:var(--paper);border:4px solid transparent;border-radius:28px;padding:14px 8px 12px;text-align:center;
+  box-shadow:0 6px 0 rgba(29,59,42,.15)}
+.klasse svg{display:block;margin:0 auto}
+.klasse span{display:block;font-family:"Fredoka",sans-serif;font-weight:600;font-size:22px;margin-top:4px}
+.klasse small{display:block;font-size:15px}
+.klasse[aria-pressed="true"]{border-color:var(--pad);background:var(--pad-light)}
+.start-form{text-align:center;margin-top:26px}
+.start-form label{display:block;font-size:20px;margin-bottom:8px}
+.nick{font:inherit;font-size:24px;padding:12px 18px;border:3px solid var(--ink);border-radius:18px;width:min(320px,90%);text-align:center}
+.hint{color:var(--retry);min-height:28px;font-size:18px;margin:8px 0}
+.frogline{display:flex;justify-content:center;gap:6px;margin-top:14px}
+
+/* ---------- Kopfleiste Aufgaben ---------- */
+.bar{background:var(--pond);color:#fff;position:sticky;top:0;z-index:5;padding:10px 16px}
+.bar-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.bar .who{font-weight:700;font-size:18px}
+.bar .stufe{font-size:16px;background:rgba(255,255,255,.18);border-radius:999px;padding:2px 12px}
+.map{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap}
+.map .grp{display:flex;gap:4px}
+.pad{width:18px;height:18px;border-radius:50% 50% 50% 0;background:rgba(255,255,255,.28);position:relative}
+.pad.ok{background:var(--pad)}
+.pad.prak{background:var(--sun)}
+.pad.now{background:#fff;box-shadow:0 0 0 3px var(--sun)}
+
+/* ---------- Aufgabe ---------- */
+.card{background:var(--paper);border-radius:30px;padding:20px 20px 26px;margin-top:18px;box-shadow:0 6px 0 rgba(29,59,42,.12)}
+.task-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.tag{border-radius:999px;padding:2px 14px;font-size:16px;font-weight:700}
+.tag.haupt{background:var(--pad-light);color:var(--pad-dark)}
+.tag.uebung{background:var(--sun);color:var(--ink)}
+.tag.bonus{background:var(--pond-light);color:var(--pond)}
+.tag.thema{background:var(--bg)}
+.nr{margin-left:auto;font-size:16px;opacity:.75}
+.companion{display:flex;align-items:flex-end;gap:10px;margin:8px 0 16px}
+.companion svg{flex:none}
+.bubble{background:var(--pond-light);border-radius:22px 22px 22px 4px;padding:10px 16px;font-size:21px}
+.stage{display:flex;flex-direction:column;align-items:center;gap:18px}
+.answer-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center}
+.num{font:inherit;font-size:30px;font-weight:700;width:130px;text-align:center;padding:8px;border:3px solid var(--ink);border-radius:16px;background:#fff;color:var(--ink)}
+.num.small{width:84px}
+.num.right{border-color:var(--pad);background:var(--pad-light)}
+.num.wrong{border-color:var(--retry);background:var(--retry-light)}
+.num[disabled]{opacity:1;-webkit-text-fill-color:var(--ink)}
+.word{font-size:28px;font-weight:700;background:var(--bg);border-radius:18px;padding:10px 20px;text-align:center;word-break:break-word;max-width:100%}
+.bignum{font-family:"Fredoka",sans-serif;font-size:56px;font-weight:700;letter-spacing:2px}
+.choices{display:flex;flex-direction:column;gap:12px;width:min(520px,100%)}
+.choice{border:3px solid var(--ink);background:#fff;border-radius:18px;padding:12px 16px;font-size:22px;text-align:left;color:var(--ink);word-break:break-word}
+.choice.right{border-color:var(--pad);background:var(--pad-light)}
+.choice.wrong{border-color:var(--retry);background:var(--retry-light)}
+.fb{margin-top:20px;border-radius:22px;padding:14px 18px;display:none;text-align:center}
+.fb.show{display:block}
+.fb.good{background:var(--pad-light)}
+.fb.bad{background:var(--retry-light)}
+.fb p{margin:0 0 12px}
+.fb b{font-family:"Fredoka",sans-serif;font-size:26px}
+
+/* Zahlbild */
+.blocks{display:flex;gap:22px;align-items:flex-end;justify-content:center;flex-wrap:wrap;padding:10px;background:var(--bg);border-radius:22px;max-width:100%}
+.bgrp{display:flex;gap:5px;align-items:flex-end;flex-wrap:wrap;max-width:340px;justify-content:center}
+.h100{width:50px;height:50px;border:2px solid var(--ink);background-color:#fff;
+  background-image:linear-gradient(var(--ink) 1px,transparent 1px),linear-gradient(90deg,var(--ink) 1px,transparent 1px);
+  background-size:4.6px 4.6px;background-position:-1px -1px}
+.z10{width:9px;height:50px;border:2px solid var(--ink);background-color:#fff;
+  background-image:linear-gradient(var(--ink) 1px,transparent 1px);background-size:100% 4.6px;background-position:0 -1px}
+.dots{display:grid;grid-template-columns:repeat(3,11px);gap:4px}
+.e1{width:11px;height:11px;border-radius:50%;background:var(--ink)}
+.hze{border-collapse:collapse}
+.hze th,.hze td{border:3px solid var(--ink);padding:6px;text-align:center}
+.hze th{font-family:"Fredoka",sans-serif;font-size:26px;width:100px}
+
+/* Tausenderfeld */
+.feld-scroll{overflow-x:auto;max-width:100%}
+.feld{border-collapse:collapse;background:#fff}
+.feld td{border:1.5px solid var(--ink);width:44px;height:40px;text-align:center;font-size:14px;padding:0}
+.feld td.ziel{background:var(--pad-light)}
+.feld td.ziel span{display:inline-block;width:32px;height:26px;border-radius:50%;background:var(--pad);color:#fff;font-weight:700;line-height:26px;font-size:17px}
+
+/* Zahlenstrahl */
+.strahl-scroll{overflow-x:auto;max-width:100%;width:100%}
+.strahl{width:100%;min-width:560px;height:auto;display:block}
+
+/* Zählen */
+.seq{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
+.lily{width:92px;height:92px;border-radius:50% 50% 50% 8%;background:var(--pad-light);border:3px solid var(--pad);
+  display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700}
+.lily .num{width:76px;font-size:22px;padding:6px 2px;border-width:2px}
+.arrow{font-size:22px;color:var(--pad-dark)}
+.sticks{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:520px}
+.sticks .bgrp{gap:4px}
+
+/* Ende */
+.certificate{text-align:center}
+.certificate h2{font-size:34px;margin:6px 0}
+.fbtext{text-align:left;background:var(--bg);border-radius:22px;padding:14px 20px;margin:16px 0}
+.fbtext h3{margin:10px 0 4px;font-size:22px}
+.fbtext ul{margin:0;padding-left:22px}
+.fbtext li{margin:4px 0}
+.code{width:100%;min-height:210px;font-family:"Andika",sans-serif;font-size:16px;border:2px dashed var(--pond);border-radius:16px;padding:12px;background:#fff;color:var(--ink)}
+.row-btn{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.small-note{font-size:16px;opacity:.8}
+@media (max-width:520px){
+  body{font-size:18px}
+  .klassen{gap:10px}
+  .klasse span{font-size:19px}
+  .bignum{font-size:44px}
+  .lily{width:78px;height:78px}
+  .lily .num{width:64px;font-size:19px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .hop{animation:hop .5s ease}
+  @keyframes hop{0%{transform:translateY(0)}40%{transform:translateY(-14px)}100%{transform:translateY(0)}}
+}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<main id="app"></main>
+
+<script>
+/* =========================================================
+   Figuren (eigene Zeichnungen)
+   ========================================================= */
+function frog(w){return `<svg width="${w}" height="${w}" viewBox="0 0 100 100" aria-hidden="true">
+<ellipse cx="50" cy="70" rx="36" ry="26" fill="#6BAA3A" stroke="#1D3B2A" stroke-width="3"/>
+<ellipse cx="50" cy="52" rx="32" ry="22" fill="#6BAA3A" stroke="#1D3B2A" stroke-width="3"/>
+<circle cx="33" cy="32" r="12" fill="#fff" stroke="#1D3B2A" stroke-width="3"/><circle cx="67" cy="32" r="12" fill="#fff" stroke="#1D3B2A" stroke-width="3"/>
+<circle cx="35" cy="33" r="5" fill="#1D3B2A"/><circle cx="65" cy="33" r="5" fill="#1D3B2A"/>
+<path d="M34 56 Q50 70 66 56" fill="none" stroke="#1D3B2A" stroke-width="3" stroke-linecap="round"/>
+<circle cx="30" cy="76" r="4" fill="#3E7A22"/><circle cx="70" cy="78" r="5" fill="#3E7A22"/><circle cx="54" cy="84" r="3" fill="#3E7A22"/></svg>`}
+function meerkat(w){return `<svg width="${w}" height="${w}" viewBox="0 0 100 100" aria-hidden="true">
+<ellipse cx="50" cy="78" rx="20" ry="22" fill="#D9B27C" stroke="#1D3B2A" stroke-width="3"/>
+<ellipse cx="50" cy="82" rx="11" ry="13" fill="#F1DDB8"/>
+<ellipse cx="50" cy="38" rx="22" ry="24" fill="#D9B27C" stroke="#1D3B2A" stroke-width="3"/>
+<circle cx="29" cy="24" r="6" fill="#7A5A35" stroke="#1D3B2A" stroke-width="2"/><circle cx="71" cy="24" r="6" fill="#7A5A35" stroke="#1D3B2A" stroke-width="2"/>
+<ellipse cx="40" cy="36" rx="7" ry="8" fill="#7A5A35"/><ellipse cx="60" cy="36" rx="7" ry="8" fill="#7A5A35"/>
+<circle cx="40" cy="36" r="3.5" fill="#fff"/><circle cx="60" cy="36" r="3.5" fill="#fff"/>
+<circle cx="40" cy="36" r="2" fill="#1D3B2A"/><circle cx="60" cy="36" r="2" fill="#1D3B2A"/>
+<ellipse cx="50" cy="50" rx="10" ry="8" fill="#F1DDB8"/><ellipse cx="50" cy="47" rx="4" ry="3" fill="#1D3B2A"/>
+<path d="M45 54 Q50 58 55 54" fill="none" stroke="#1D3B2A" stroke-width="2" stroke-linecap="round"/></svg>`}
+function wolf(w){return `<svg width="${w}" height="${w}" viewBox="0 0 100 100" aria-hidden="true">
+<path d="M22 12 L38 34 L20 42 Z" fill="#8C96A0" stroke="#1D3B2A" stroke-width="3" stroke-linejoin="round"/>
+<path d="M78 12 L62 34 L80 42 Z" fill="#8C96A0" stroke="#1D3B2A" stroke-width="3" stroke-linejoin="round"/>
+<ellipse cx="50" cy="56" rx="34" ry="32" fill="#8C96A0" stroke="#1D3B2A" stroke-width="3"/>
+<ellipse cx="50" cy="70" rx="18" ry="15" fill="#E4E8EC"/>
+<circle cx="37" cy="48" r="5" fill="#fff"/><circle cx="63" cy="48" r="5" fill="#fff"/>
+<circle cx="38" cy="49" r="3" fill="#1D3B2A"/><circle cx="62" cy="49" r="3" fill="#1D3B2A"/>
+<ellipse cx="50" cy="62" rx="6" ry="4.5" fill="#1D3B2A"/>
+<path d="M42 72 Q50 78 58 72" fill="none" stroke="#1D3B2A" stroke-width="2.5" stroke-linecap="round"/></svg>`}
+const FIG = {frog, meerkat, wolf};
+const FIGNAME = {frog:"Frosch Fridolin", meerkat:"Erdmännchen Emil", wolf:"Wolf Wilma"};
+
+/* =========================================================
+   Themen
+   ========================================================= */
+const THEMES = {
+  bild:   {name:"Zahlbild",      tip:"Großes Quadrat = 100, Stange = 10, Punkt = 1. Zähle erst die Hunderter, dann die Zehner, dann die Einer.",
+           good:"Du erkennst Hunderter, Zehner und Einer sicher.",
+           work:"Beim Zahlbild: Zähle zuerst die großen Quadrate (Hunderter), dann die Stangen (Zehner), dann die Punkte (Einer)."},
+  wort:   {name:"Zahlwörter",    tip:"Hör genau hin: Zuerst kommen die Hunderter. Bei „vierundsiebzig“ steht die 4 hinten: 74.",
+           good:"Zahlwörter liest und schreibst du schon richtig gut.",
+           work:"Bei den Zahlwörtern: Sprich die Zahl langsam. Bei „vierundsiebzig“ steht die 4 hinten: 74."},
+  feld:   {name:"Tausenderfeld", tip:"Nach rechts wird es immer 1 mehr. Eine Zeile tiefer wird es 10 mehr.",
+           good:"Im Tausenderfeld findest du dich prima zurecht.",
+           work:"Im Tausenderfeld: Nach rechts wird es 1 mehr, nach unten 10 mehr."},
+  strahl: {name:"Zahlenstrahl",  tip:"Finde zuerst heraus, wie viel ein kleiner Strich bedeutet. Zähle dann vom nächsten Wert aus.",
+           good:"Am Zahlenstrahl hast du den Durchblick.",
+           work:"Am Zahlenstrahl: Finde zuerst heraus, wie viel ein kleiner Strich bedeutet."},
+  zaehl:  {name:"Zählen",        tip:"Schau genau: Wie groß sind die Sprünge? Geht es vorwärts oder rückwärts?",
+           good:"Du kannst super in Schritten zählen, vorwärts und rückwärts.",
+           work:"Beim Zählen: Schau genau, wie groß die Sprünge sind, besonders beim Sprung über einen Hunderter."},
+  buendel:{name:"Bündeln",       tip:"10 Einer sind 1 Zehner. 10 Zehner sind 1 Hunderter.",
+           good:"Bündeln klappt bei dir schon toll.",
+           work:"Beim Bündeln: 10 Einer werden zu 1 Zehner, 10 Zehner werden zu 1 Hunderter."}
+};
+
+/* =========================================================
+   Die 50 Aufgaben
+   Aufbau: je Block 1 Pfad-Stein (Hauptaufgabe) + 2 Übungen
+   Pfad-Stein richtig -> nächster Pfad-Stein
+   Pfad-Stein falsch  -> 2 Übungen -> nächster Pfad-Stein
+   49 und 50: Knobelaufgaben
+   ========================================================= */
+const T = {};
+function add(id, theme, type, data, extra){ T[id] = Object.assign({id, theme, type, data}, extra||{}); }
+
+/* Stufe 1: Zahlen bis 200 */
+add(1,"bild","blocks",{h:1,z:3,e:4},{ans:[134]});
+add(2,"bild","blocks",{h:1,z:2,e:0},{ans:[120],tip:"Es gibt keine Punkte. Dann steht bei den Einern eine 0."});
+add(3,"bild","blocks",{h:1,z:0,e:6},{ans:[106],tip:"Es gibt keine Stangen. Dann steht bei den Zehnern eine 0."});
+add(4,"feld","grid",{start:101,show:[102,110,123,124,130,145,155,168,177,180,185],target:137},{ans:[137]});
+add(5,"feld","grid",{start:101,show:[101,110,120,130],target:115},{ans:[115]});
+add(6,"feld","grid",{start:101,show:[151,155,170,180],target:160},{ans:[160],tip:"Ganz rechts in einer Zeile steht immer eine glatte Zehnerzahl."});
+add(7,"zaehl","seq",{items:[147,148,null,null,151,null]},{ans:[149,150,152]});
+add(8,"zaehl","seq",{items:[118,119,null,121,null]},{ans:[120,122]});
+add(9,"zaehl","seq",{items:[120,130,null,150,null]},{ans:[140,160],tip:"Hier sind es 10er-Sprünge."});
+add(10,"wort","word2num",{word:"hundertachtundfünfzig"},{ans:[158]});
+add(11,"wort","word2num",{word:"hundertvierzig"},{ans:[140]});
+add(12,"wort","num2word",{n:116,options:["hundertsechzig","hundertsechzehn","sechzehnhundert"]},{correct:1});
+
+/* Stufe 2: glatte Hunderter und Zehner */
+add(13,"zaehl","seq",{items:[300,400,null,null,700,null]},{ans:[500,600,800]});
+add(14,"zaehl","seq",{items:[100,200,null,400,null]},{ans:[300,500]});
+add(15,"zaehl","seq",{items:[900,800,null,null,500]},{ans:[700,600],tip:"Hier geht es rückwärts in 100er-Sprüngen."});
+add(16,"strahl","line",{min:0,max:1000,step:100,labels:[0,500,1000],target:700},{ans:[700]});
+add(17,"strahl","line",{min:0,max:1000,step:100,labels:[0,100,200,300,400,500,600,700,800,900,1000],target:300},{ans:[300]});
+add(18,"strahl","line",{min:0,max:1000,step:100,labels:[0,500,1000],target:200},{ans:[200],tip:"Jeder Strich ist 100 mehr. Zähle von 0 aus: 100, 200 …"});
+add(19,"bild","blocks",{h:7,z:4,e:0},{ans:[740]});
+add(20,"bild","blocks",{h:5,z:0,e:0},{ans:[500]});
+add(21,"bild","blocks",{h:3,z:6,e:0},{ans:[360]});
+add(22,"buendel","fill",{text:"Immer 10 Zehner sind 1 Hunderter. Wie viel sind 30 Zehner?",sticks:30},{ans:[300]});
+add(23,"buendel","fill",{text:"Wie viele Zehner braucht man für 1 Hunderter?",hundred:true},{ans:[10],tip:"Zähle die Streifen im großen Quadrat."});
+add(24,"buendel","fill",{text:"Wie viel sind 20 Zehner?",sticks:20},{ans:[200],tip:"Bündle immer 10 Zehner zu einem Hunderter."});
+
+/* Stufe 3: alle Zahlen bis 1000 */
+add(25,"wort","num2word",{n:574,options:["fünfhundertsiebenundvierzig","vierhundertfünfundsiebzig","fünfhundertvierundsiebzig"]},{correct:2});
+add(26,"wort","word2num",{word:"zweihundertneununddreißig"},{ans:[239]});
+add(27,"wort","num2word",{n:833,options:["achthundertdreiunddreißig","achthundertdreißig","dreihundertachtunddreißig"]},{correct:0});
+add(28,"feld","grid",{start:901,show:[902,923,924,945,955,968,977,980,985],target:936},{ans:[936]});
+add(29,"feld","grid",{start:901,show:[901,902,910,920],target:912},{ans:[912]});
+add(30,"feld","grid",{start:901,show:[941,945,960,970],target:950},{ans:[950],tip:"Ganz rechts in einer Zeile steht immer eine glatte Zehnerzahl."});
+add(31,"strahl","line",{min:300,max:400,step:10,labels:[300,350,400],target:360},{ans:[360]});
+add(32,"strahl","line",{min:300,max:400,step:10,labels:[300,320,340,360,380,400],target:330},{ans:[330],tip:"Jeder kleine Strich ist 10 mehr."});
+add(33,"strahl","line",{min:500,max:600,step:10,labels:[500,510,520,530,540,550,560,570,580,590,600],target:540},{ans:[540]});
+add(34,"bild","hze",{n:608},{ans:[6,0,8]});
+add(35,"bild","hze",{n:452},{ans:[4,5,2]});
+add(36,"bild","hze",{n:290},{ans:[2,9,0],tip:"Die letzte Ziffer zeigt die Einer. Eine 0 heißt: keine Einer."});
+
+/* Stufe 4: Knobeln und Übergänge */
+add(37,"zaehl","seq",{items:[420,410,null,null,380]},{ans:[400,390],tip:"Rückwärts in 10er-Sprüngen. Nach 400 kommt 390."});
+add(38,"zaehl","seq",{items:[970,980,null,null]},{ans:[990,1000]});
+add(39,"zaehl","seq",{items:[302,301,null,null,298]},{ans:[300,299],tip:"Rückwärts in 1er-Sprüngen. Nach 300 kommt 299."});
+add(40,"buendel","blocks",{h:3,z:14,e:5},{ans:[445],tip:"Bündle 10 Stangen zu einem Hunderter. Dann hast du 4 Hunderter und 4 Zehner."});
+add(41,"buendel","blocks",{h:2,z:10,e:3},{ans:[303],tip:"10 Stangen sind 1 Hunderter. Wie viele Hunderter hast du dann?"});
+add(42,"buendel","blocks",{h:4,z:2,e:12},{ans:[432],tip:"10 Punkte sind 1 Zehner. Dann bleiben 2 Punkte übrig."});
+add(43,"strahl","line",{min:900,max:1000,step:10,labels:[900,1000],target:970},{ans:[970]});
+add(44,"strahl","line",{min:900,max:1000,step:10,labels:[900,950,1000],target:920},{ans:[920],tip:"Jeder kleine Strich ist 10 mehr. Zähle von 900 aus."});
+add(45,"strahl","line",{min:700,max:800,step:10,labels:[700,750,800],target:780},{ans:[780]});
+add(46,"wort","word2num",{word:"siebenhundertsieben"},{ans:[707]});
+add(47,"wort","word2num",{word:"neunhundertzwölf"},{ans:[912]});
+add(48,"wort","num2word",{n:770,options:["siebenhundertsieben","siebenhundertsiebzig","siebzighundertsieben"]},{correct:1});
+
+/* Knobelaufgaben */
+add(49,"buendel","fill",{text:"999 Froschgeschwister sitzen im Teich. Da hüpft noch 1 Frosch dazu. Wie viele Frösche sind es jetzt?"},{ans:[1000],tip:"9 Einer und 1 Einer sind 1 Zehner. Dann sind es 10 Zehner, also 1 Hunderter mehr …"});
+add(50,"strahl","fill",{text:"Welche Zahl liegt genau in der Mitte zwischen 400 und 600?"},{ans:[500],tip:"Stell dir den Zahlenstrahl vor: 400 … ? … 600."});
+
+const LAST_BLOCK = 48;
+const isHaupt = id => id <= LAST_BLOCK && id % 3 === 1;
+const isBonus = id => id > LAST_BLOCK;
+const stufeOf = id => id > LAST_BLOCK ? 5 : Math.ceil(id / 12);
+const HAUPT = []; for (let i = 1; i <= LAST_BLOCK; i += 3) HAUPT.push(i);
+const STUFEN = {1:"Zahlen bis 200",2:"Glatte Zahlen bis 1000",3:"Alle Zahlen bis 1000",4:"Knobeln",5:"Bonus"};
+const QUESTION = {
+  blocks:"Wie viele Frösche sind es? Schreibe die Zahl.",
+  grid:"Welche Zahl versteckt sich hinter dem Frosch?",
+  seq:"Welche Zahlen fehlen?",
+  word2num:"Schreibe die Zahl.",
+  num2word:"Welches Zahlwort passt?",
+  line:"Auf welche Zahl zeigt der Pfeil?",
+  hze:"Wie viele Hunderter, Zehner und Einer hat die Zahl?",
+  fill:""
+};
+const PRAISE = ["Super!","Klasse gemacht!","Richtig!","Toll!","Quak-tastisch!","Spitze!"];
+
+/* =========================================================
+   Zustand (wird im Browser gespeichert)
+   ========================================================= */
+const KEY = "lernpfad1000_v1";
+let S = null;
+function fresh(nick, klasse){ return {nick, klasse, pos:1, tries:{}, log:[], haupt:{}, phase:"task", bonus:null, started:Date.now()}; }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load(){ try{ const r = localStorage.getItem(KEY); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
+function wipe(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const app = document.getElementById("app");
+const bar = document.getElementById("bar");
+
+/* =========================================================
+   Startseite
+   ========================================================= */
+function renderStart(){
+  bar.innerHTML = "";
+  const saved = load();
+  let chosen = null;
+  app.innerHTML = `
+  <section class="hero">
+    <div class="frogline">${frog(64)}${frog(64)}${frog(64)}</div>
+    <h1>999 Froschgeschwister ziehen um</h1>
+    <p>Dein Lernpfad durch den Zahlenraum bis 1000</p>
+  </section>
+  <div class="klassen" role="group" aria-label="Wähle deine Klasse">
+    <button class="klasse" data-k="Erdmännchen" aria-pressed="false">${meerkat(90)}<span>Erdmännchen</span><small>Klasse 3</small></button>
+    <button class="klasse" data-k="Wölfe" aria-pressed="false">${wolf(90)}<span>Wölfe</span><small>Klasse 3</small></button>
+  </div>
+  <div class="wrap start-form">
+    <label for="nick">Tippe auf deine Klasse und schreibe deinen Spitznamen:</label>
+    <input id="nick" class="nick" maxlength="20" autocomplete="off" placeholder="Spitzname">
+    <p class="hint" id="hint"></p>
+    <button class="btn green" id="go">Los geht's</button>
+    ${saved && saved.nick ? `<p style="margin-top:22px"><button class="btn ghost" id="resume">Weiterspielen als ${esc(saved.nick)}</button></p>` : ""}
+    <p class="small-note" style="margin-top:22px">16 Pfad-Steine in 4 Stufen. Wer einen Stein nicht schafft, übt kurz und hüpft dann weiter.</p>
+  </div>`;
+  app.querySelectorAll(".klasse").forEach(b => b.onclick = () => {
+    chosen = b.dataset.k;
+    app.querySelectorAll(".klasse").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  });
+  document.getElementById("go").onclick = () => {
+    const n = document.getElementById("nick").value.trim();
+    const hint = document.getElementById("hint");
+    if (!chosen){ hint.textContent = "Tippe zuerst auf deine Klasse."; return; }
+    if (!n){ hint.textContent = "Schreibe deinen Spitznamen."; return; }
+    S = fresh(n, chosen); save(); renderTask();
+  };
+  const r = document.getElementById("resume");
+  if (r) r.onclick = () => { S = saved; route(); };
+}
+
+function route(){
+  if (S.phase === "offer") renderOffer();
+  else if (S.phase === "end") renderEnd();
+  else renderTask();
+}
+
+/* =========================================================
+   Kopfleiste mit Lernpfad-Karte
+   ========================================================= */
+function renderBar(){
+  let groups = "";
+  for (let s = 0; s < 4; s++){
+    let pads = "";
+    for (let k = 0; k < 4; k++){
+      const id = HAUPT[s*4 + k];
+      let cls = "pad";
+      if (S.haupt[id] === true) cls += " ok";
+      else if (S.haupt[id] === false) cls += " prak";
+      const cur = S.phase === "task" && !isBonus(S.pos) && Math.floor((S.pos-1)/3)*3+1 === id;
+      if (cur) cls += " now";
+      pads += `<span class="${cls}" title="Pfad-Stein ${s*4+k+1}"></span>`;
+    }
+    groups += `<span class="grp" aria-hidden="true">${pads}</span>`;
+  }
+  const st = S.phase === "task" ? stufeOf(S.pos) : 5;
+  bar.innerHTML = `<div class="bar"><div class="bar-in">
+    <span class="who">${esc(S.nick)}</span>
+    <span class="stufe">${st <= 4 ? "Stufe " + st + ": " + STUFEN[st] : "Geschafft!"}</span>
+    <span class="map">${groups}</span></div></div>`;
+}
+
+/* =========================================================
+   Darstellungen
+   ========================================================= */
+function blocksHTML(h, z, e){
+  let s = `<div class="blocks" aria-label="${h} Hunderter, ${z} Zehner, ${e} Einer">`;
+  if (h) s += `<div class="bgrp">${'<div class="h100"></div>'.repeat(h)}</div>`;
+  if (z) s += `<div class="bgrp">${'<div class="z10"></div>'.repeat(z)}</div>`;
+  if (e) s += `<div class="dots">${'<div class="e1"></div>'.repeat(e)}</div>`;
+  return s + `</div>`;
+}
+function gridHTML(d){
+  let s = `<div class="feld-scroll"><table class="feld" aria-label="Ausschnitt aus dem Tausenderfeld">`;
+  for (let r = 0; r < 10; r++){
+    s += "<tr>";
+    for (let c = 0; c < 10; c++){
+      const v = d.start + r*10 + c;
+      if (v === d.target) s += `<td class="ziel"><span>?</span></td>`;
+      else s += `<td>${d.show.includes(v) ? v : ""}</td>`;
+    }
+    s += "</tr>";
+  }
+  return s + `</table></div>`;
+}
+function lineHTML(d){
+  const W = 640, x0 = 34, x1 = 606, y = 92;
+  const px = v => x0 + (v - d.min) / (d.max - d.min) * (x1 - x0);
+  let s = `<div class="strahl-scroll"><svg class="strahl" viewBox="0 0 ${W} 140" role="img" aria-label="Zahlenstrahl von ${d.min} bis ${d.max}">`;
+  s += `<line x1="${x0-8}" y1="${y}" x2="${x1+14}" y2="${y}" stroke="#1D3B2A" stroke-width="3"/>`;
+  s += `<path d="M${x1+14} ${y-7} L${x1+26} ${y} L${x1+14} ${y+7} Z" fill="#1D3B2A"/>`;
+  for (let v = d.min; v <= d.max; v += d.step){
+    const lab = d.labels.includes(v);
+    const mid = !lab && ((v - d.min) % (d.step*5) === 0);
+    const hgt = lab ? 16 : mid ? 11 : 7;
+    s += `<line x1="${px(v)}" y1="${y-hgt}" x2="${px(v)}" y2="${y+hgt}" stroke="#1D3B2A" stroke-width="${lab?3:2}"/>`;
+    if (lab) s += `<text x="${px(v)}" y="${y+40}" text-anchor="middle" font-size="${d.labels.length > 6 ? 17 : 21}" font-family="Andika, sans-serif" fill="#1D3B2A">${v}</text>`;
+  }
+  const tx = px(d.target);
+  s += `<circle cx="${tx}" cy="26" r="18" fill="#6BAA3A" stroke="#1D3B2A" stroke-width="2.5"/>`;
+  s += `<text x="${tx}" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#fff" font-family="Fredoka, sans-serif">?</text>`;
+  s += `<path d="M${tx-9} 46 L${tx+9} 46 L${tx} ${y-18} Z" fill="#6BAA3A" stroke="#1D3B2A" stroke-width="2"/>`;
+  return s + `</svg></div>`;
+}
+function inputHTML(i, cls){ return `<input class="num ${cls||""}" data-i="${i}" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="Antwort ${i+1}">`; }
+function seqHTML(d){
+  let s = `<div class="seq">`, k = 0;
+  d.items.forEach((v, idx) => {
+    if (idx) s += `<span class="arrow" aria-hidden="true">›</span>`;
+    s += `<div class="lily">${v === null ? inputHTML(k++) : v}</div>`;
+  });
+  return s + `</div>`;
+}
+function hzeHTML(d){
+  return `<div class="bignum">${d.n}</div>
+  <table class="hze"><tr><th>H</th><th>Z</th><th>E</th></tr>
+  <tr><td>${inputHTML(0,"small")}</td><td>${inputHTML(1,"small")}</td><td>${inputHTML(2,"small")}</td></tr></table>`;
+}
+function sticksHTML(n){
+  let s = `<div class="sticks">`;
+  for (let g = 0; g < Math.ceil(n/10); g++){
+    s += `<div class="bgrp">${'<div class="z10"></div>'.repeat(Math.min(10, n - g*10))}</div>`;
+  }
+  return s + `</div>`;
+}
+
+/* =========================================================
+   Aufgabe anzeigen
+   ========================================================= */
+function companionFor(id){ const st = stufeOf(id); return st === 2 ? "meerkat" : st === 3 ? "wolf" : "frog"; }
+
+function renderTask(){
+  S.phase = "task"; save(); renderBar();
+  const t = T[S.pos];
+  const kind = isBonus(t.id) ? `<span class="tag bonus">Knobelaufgabe</span>`
+             : isHaupt(t.id) ? `<span class="tag haupt">Pfad-Stein ${HAUPT.indexOf(t.id)+1} von 16</span>`
+             : `<span class="tag uebung">Übung</span>`;
+  const q = t.type === "fill" ? t.data.text : QUESTION[t.type];
+  const who = companionFor(t.id);
+  let body = "";
+  switch (t.type){
+    case "blocks":   body = blocksHTML(t.data.h, t.data.z, t.data.e) + `<div class="answer-row">${inputHTML(0)}</div>`; break;
+    case "grid":     body = gridHTML(t.data) + `<div class="answer-row">${inputHTML(0)}</div>`; break;
+    case "line":     body = lineHTML(t.data) + `<div class="answer-row">${inputHTML(0)}</div>`; break;
+    case "seq":      body = seqHTML(t.data); break;
+    case "word2num": body = `<div class="word">${t.data.word}</div><div class="answer-row">${inputHTML(0)}</div>`; break;
+    case "hze":      body = hzeHTML(t.data); break;
+    case "num2word": body = `<div class="bignum">${t.data.n}</div><div class="choices">${t.data.options.map((o,i)=>`<button class="choice" data-c="${i}">${o}</button>`).join("")}</div>`; break;
+    case "fill":     body = (t.data.sticks ? sticksHTML(t.data.sticks) : t.data.hundred ? blocksHTML(1,0,0) : "") + `<div class="answer-row">${inputHTML(0)}</div>`; break;
+  }
+  const needsBtn = t.type !== "num2word";
+  app.innerHTML = `<div class="wrap"><section class="card">
+    <div class="task-head">${kind}<span class="tag thema">${THEMES[t.theme].name}</span><span class="nr">Aufgabe ${t.id}</span></div>
+    <div class="companion">${FIG[who](70)}<div class="bubble">${q}</div></div>
+    <div class="stage">${body}
+      ${needsBtn ? `<button class="btn green" id="check">Prüfen</button>` : ""}
+    </div>
+    <div class="fb" id="fb" aria-live="polite"></div>
+  </section></div>`;
+  window.scrollTo(0,0);
+
+  const inputs = [...app.querySelectorAll("input.num")];
+  if (inputs[0] && !("ontouchstart" in window)) inputs[0].focus();
+  inputs.forEach((inp, k) => inp.addEventListener("keydown", ev => {
+    if (ev.key === "Enter"){
+      ev.preventDefault();
+      const nxt = inputs[k+1];
+      if (nxt && nxt.value === "") nxt.focus(); else check();
+    }
+  }));
+  if (needsBtn) document.getElementById("check").onclick = check;
+  app.querySelectorAll(".choice").forEach(b => b.onclick = () => check(+b.dataset.c));
+}
+
+/* =========================================================
+   Prüfen
+   ========================================================= */
+function solutionText(t){
+  if (t.type === "num2word") return t.data.options[t.correct];
+  if (t.type === "hze") return `H ${t.ans[0]}, Z ${t.ans[1]}, E ${t.ans[2]}`;
+  return t.ans.join(", ");
+}
+
+function check(choice){
+  const t = T[S.pos];
+  const fb = document.getElementById("fb");
+  let ok;
+  if (t.type === "num2word"){
+    ok = choice === t.correct;
+    const btn = app.querySelector(`.choice[data-c="${choice}"]`);
+    btn.classList.add(ok ? "right" : "wrong");
+  } else {
+    const inputs = [...app.querySelectorAll("input.num")];
+    if (inputs.some(i => i.value.trim() === "")){
+      fb.className = "fb show bad"; fb.innerHTML = `<p>Fülle bitte alle Felder aus.</p>`; return;
+    }
+    ok = true;
+    inputs.forEach((inp, k) => {
+      const good = parseInt(inp.value.replace(/\D/g,""), 10) === t.ans[k];
+      inp.classList.remove("right","wrong");
+      inp.classList.add(good ? "right" : "wrong");
+      if (!good) ok = false;
+    });
+  }
+  S.tries[t.id] = (S.tries[t.id] || 0) + 1;
+  const tries = S.tries[t.id];
+  const tip = t.tip || THEMES[t.theme].tip;
+
+  if (ok){
+    finishTask(t, true, tries);
+    lockTask();
+    const extra = isHaupt(t.id) ? "Du hüpfst direkt zum nächsten Pfad-Stein." : "";
+    fb.className = "fb show good";
+    fb.innerHTML = `<p><b>${PRAISE[Math.floor(Math.random()*PRAISE.length)]}</b></p>${extra ? `<p>${extra}</p>` : ""}<button class="btn" id="next">Weiter</button>`;
+    const f = app.querySelector(".companion svg"); if (f){ f.classList.remove("hop"); f.getBoundingClientRect(); f.classList.add("hop"); }
+  } else if (isHaupt(t.id)){
+    finishTask(t, false, tries);
+    lockTask();
+    fb.className = "fb show bad";
+    fb.innerHTML = `<p>Noch nicht ganz. Richtig ist: <strong>${solutionText(t)}</strong></p><p>${tip}</p><p>Wir üben das jetzt kurz zusammen.</p><button class="btn" id="next">Zu den Übungen</button>`;
+  } else if (tries < 2){
+    fb.className = "fb show bad";
+    fb.innerHTML = `<p><strong>Versuch es nochmal!</strong></p><p>Tipp: ${tip}</p>`;
+    if (t.type === "num2word") setTimeout(() => app.querySelectorAll(".choice.wrong").forEach(b => { b.disabled = true; }), 0);
+    return save();
+  } else {
+    finishTask(t, false, tries);
+    lockTask();
+    fb.className = "fb show bad";
+    fb.innerHTML = `<p>Richtig ist: <strong>${solutionText(t)}</strong></p><p>${tip}</p><p>Das nächste Mal klappt es bestimmt!</p><button class="btn" id="next">Weiter</button>`;
+  }
+  save();
+  const nb = document.getElementById("next");
+  nb.onclick = () => goNext(t, ok);
+  nb.focus();
+}
+
+function lockTask(){
+  app.querySelectorAll("input.num, .choice, #check").forEach(el => el.disabled = true);
+}
+
+function finishTask(t, ok, tries){
+  S.log.push({id:t.id, ok, first: ok && tries === 1, tries});
+  if (isHaupt(t.id)) S.haupt[t.id] = ok;
+  if (isBonus(t.id)) S.bonus = S.bonus || {};
+  if (isBonus(t.id)) S.bonus[t.id] = ok;
+}
+
+function goNext(t, ok){
+  let next;
+  if (isHaupt(t.id)) next = ok ? t.id + 3 : t.id + 1;
+  else next = t.id + 1;
+  if (t.id === 50){ S.phase = "end"; save(); return renderEnd(); }
+  if (!isBonus(t.id) && next > LAST_BLOCK){ S.phase = "offer"; save(); return renderOffer(); }
+  S.pos = next; save(); renderTask();
+}
+
+/* =========================================================
+   Knobel-Angebot
+   ========================================================= */
+function renderOffer(){
+  renderBar();
+  app.innerHTML = `<div class="wrap"><section class="card" style="text-align:center">
+    <div class="frogline">${frog(80)}${meerkat(80)}${wolf(80)}</div>
+    <h2>Du hast alle 16 Pfad-Steine geschafft!</h2>
+    <p>Magst du noch 2 Knobelaufgaben lösen?</p>
+    <div class="row-btn"><button class="btn green" id="yes">Ja, knobeln!</button><button class="btn ghost" id="no">Nein, zum Ergebnis</button></div>
+  </section></div>`;
+  document.getElementById("yes").onclick = () => { S.pos = 49; S.bonus = S.bonus || {}; renderTask(); };
+  document.getElementById("no").onclick = () => { S.phase = "end"; save(); renderEnd(); };
+}
+
+/* =========================================================
+   Ergebnis: Feedback und Code für die Lehrkraft
+   ========================================================= */
+function stats(){
+  const per = {};
+  Object.keys(THEMES).forEach(k => per[k] = {ok:0, all:0});
+  HAUPT.forEach(id => { if (id in S.haupt){ per[T[id].theme].all++; if (S.haupt[id]) per[T[id].theme].ok++; } });
+  const hauptOk = HAUPT.filter(id => S.haupt[id]).length;
+  const uebLog = S.log.filter(l => !isHaupt(l.id) && !isBonus(l.id));
+  const uebFirst = uebLog.filter(l => l.first).length;
+  return {per, hauptOk, uebLog, uebFirst};
+}
+
+function renderEnd(){
+  S.phase = "end"; save(); renderBar();
+  const st = stats();
+  const good = [], work = [];
+  Object.keys(THEMES).forEach(k => {
+    const p = st.per[k];
+    if (!p.all) return;
+    if (p.ok === p.all) good.push(THEMES[k].good); else work.push(THEMES[k].work);
+  });
+  let intro;
+  if (st.hauptOk === 16) intro = "Wow, du hast alle 16 Pfad-Steine auf Anhieb geschafft! Du bist ein echter Tausender-Profi.";
+  else if (st.hauptOk >= 12) intro = `Du hast ${st.hauptOk} von 16 Pfad-Steinen auf Anhieb geschafft. Du kannst schon ganz viel!`;
+  else if (st.hauptOk >= 8) intro = `Du hast ${st.hauptOk} von 16 Pfad-Steinen auf Anhieb geschafft. Du bist richtig gut unterwegs!`;
+  else intro = "Du hast den ganzen Pfad geschafft und dabei fleißig geübt. Darauf kannst du stolz sein!";
+  let bonusTxt = "";
+  if (S.bonus && Object.keys(S.bonus).length){
+    const b = Object.values(S.bonus).filter(Boolean).length;
+    bonusTxt = b === 2 ? "Und die Knobelaufgaben hast du auch gelöst. Stark!" : "Toll, dass du dich an die Knobelaufgaben getraut hast!";
+  }
+
+  const date = new Date().toLocaleDateString("de-DE");
+  const mark = l => l.first ? "✓" : l.ok ? "~" : "✗";
+  const code = [
+    "Lernpfad bis 1000 – Ergebnis",
+    `Name: ${S.nick} | Klasse: ${S.klasse} | Datum: ${date}`,
+    `Pfad-Steine auf Anhieb: ${st.hauptOk} von 16`,
+    `Übungen gemacht: ${st.uebLog.length} (davon ${st.uebFirst} beim 1. Versuch richtig)`,
+    "Themen (Pfad-Steine): " + Object.keys(THEMES).map(k => `${THEMES[k].name} ${st.per[k].ok}/${st.per[k].all}`).join(", "),
+    "Knobelaufgaben: " + (S.bonus && Object.keys(S.bonus).length ? `${Object.values(S.bonus).filter(Boolean).length} von 2` : "nicht gemacht"),
+    "Weg: " + S.log.map(l => `${l.id}${mark(l)}`).join(" "),
+    "Legende: ✓ beim 1. Versuch richtig, ~ beim 2. Versuch, ✗ nicht gelöst"
+  ].join("\n");
+
+  app.innerHTML = `<div class="wrap"><section class="card certificate">
+    <div class="frogline">${frog(76)}${meerkat(76)}${wolf(76)}</div>
+    <h2>Super gemacht, ${esc(S.nick)}!</h2>
+    <p>${intro} ${bonusTxt}</p>
+    <div class="fbtext">
+      ${good.length ? `<h3>Das kannst du schon</h3><ul>${good.map(g=>`<li>${g}</li>`).join("")}</ul>` : ""}
+      ${work.length ? `<h3>Daran kannst du noch arbeiten</h3><ul>${work.map(w=>`<li>${w}</li>`).join("")}</ul>` : `<h3>Daran kannst du noch arbeiten</h3><ul><li>Such dir eine Zahl bis 1000 aus und erkläre sie einem anderen Kind mit Hundertern, Zehnern und Einern.</li></ul>`}
+    </div>
+    <h3>Dein Ergebnis-Code für deine Lehrkraft</h3>
+    <p class="small-note">Tippe auf „Code kopieren“ und füge ihn dort ein, wo deine Lehrkraft es dir gesagt hat.</p>
+    <textarea class="code" id="code" readonly>${esc(code)}</textarea>
+    <div class="row-btn"><button class="btn" id="copy">Code kopieren</button><button class="btn ghost" id="restart">Neu starten</button></div>
+    <p id="copied" class="small-note" aria-live="polite"></p>
+  </section></div>`;
+
+  document.getElementById("copy").onclick = async () => {
+    const ta = document.getElementById("code"), msg = document.getElementById("copied");
+    try { await navigator.clipboard.writeText(ta.value); msg.textContent = "Kopiert!"; }
+    catch(e){ ta.focus(); ta.select(); ta.setSelectionRange(0, ta.value.length);
+      try { document.execCommand("copy"); msg.textContent = "Kopiert!"; } catch(e2){ msg.textContent = "Bitte den Text markieren und kopieren."; } }
+  };
+  document.getElementById("restart").onclick = () => {
+    if (confirm("Wirklich neu starten? Dein Ergebnis wird gelöscht.")){ wipe(); S = null; renderStart(); }
+  };
+}
+
+/* Start */
+renderStart();
+</script>
+</body>
+</html>
